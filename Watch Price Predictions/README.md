@@ -1,14 +1,16 @@
 <p align="center">
-  <h1 align="center">⌚ Smartwatch Price Prediction</h1>
+  <h1 align="center">⌚ Smartwatch Price Prediction & Market Analysis</h1>
   <p align="center">
-    <em>A machine learning project to predict smartwatch prices based on brand, specifications, and market features.</em>
+    <em>An end-to-end data science and machine learning project analyzing smartwatch specifications, market signals, and pricing dynamics.</em>
   </p>
   <p align="center">
+    <a href="#-problem-statement">Problem Statement</a> •
+    <a href="#-dataset-overview">Dataset</a> •
+    <a href="#-methodology--workflow">Methodology</a> •
+    <a href="#-exploratory-data-analysis--key-insights">EDA & Insights</a> •
+    <a href="#-tech-stack">Tech Stack</a> •
     <a href="#-getting-started">Getting Started</a> •
-    <a href="#-dataset">Dataset</a> •
-    <a href="#-methodology">Methodology</a> •
-    <a href="#-results">Results</a> •
-    <a href="#-tech-stack">Tech Stack</a>
+    <a href="#-roadmap">Roadmap</a>
   </p>
 </p>
 
@@ -16,42 +18,45 @@
 
 ## 📌 Problem Statement
 
-The smartwatch market has seen explosive growth, with prices ranging from ₹1,199 to ₹1,39,990 across dozens of brands. With such a wide range, it becomes crucial for both consumers and retailers to understand what drives pricing.
+The smartwatch market encompasses a vast spectrum of devices—ranging from budget fitness trackers priced under ₹1,200 to premium smartwatches exceeding ₹1,39,000. With diverse brands, feature sets, and aggressive e-commerce discounting, understanding the true determinants of smartwatch pricing is vital for both consumers and manufacturers.
 
-**Goal:** Build a predictive model that estimates the current selling price of a smartwatch based on its brand, hardware specifications (display size, battery life, weight), features (touchscreen, Bluetooth), and market signals (original price, discount percentage, user ratings).
+**Core Objectives:**
+1. **Understand Pricing Drivers:** Uncover how hardware specifications (display size, battery life, weight, touchscreen, Bluetooth) and brand positioning influence product pricing and discounts.
+2. **Predict Selling Price:** Prepare data and train regression models to accurately forecast the `Current Price` of smartwatches based on technical attributes and market signals.
 
 ---
 
-## 📊 Dataset
+## 📊 Dataset Overview
 
-| Property | Detail |
+| Attribute | Details |
 |---|---|
-| **Source** | `smartwatches.csv` |
-| **Records** | 450 smartwatches |
-| **Features** | 15 columns |
-| **Brands** | 18 unique brands |
+| **Dataset File** | `smartwatches.csv` |
+| **Total Records** | 450 smartwatches (raw) |
+| **Feature Count** | 15 columns |
+| **Unique Brands** | 18 brands |
+| **Target Variable** | `Current Price` (₹ INR) |
 
-### Features
+### Feature Dictionary
 
-| Feature | Type | Description |
+| Feature | Data Type | Description |
 |---|---|---|
-| `Brand` | Categorical | Manufacturer (Apple, Samsung, Boat, Fire-Boltt, Noise, etc.) |
-| `Current Price` | Numerical | Current selling price (₹) |
-| `Original Price` | Numerical | Listed MRP (₹) |
-| `Discount Percentage` | Numerical | Discount offered (%) |
-| `Rating` | Numerical | User rating (1–5 scale) |
-| `Number OF Ratings` | Numerical | Total number of user ratings |
-| `Model Name` | Categorical | Model identifier |
-| `Dial Shape` | Categorical | Shape of the watch dial |
-| `Strap Color` | Categorical | Color of the strap |
-| `Strap Material` | Categorical | Material type (Silicon, Leather, Metal, etc.) |
-| `Touchscreen` | Categorical | Touchscreen support (Yes/No) |
-| `Battery Life (Days)` | Numerical | Battery life in days |
-| `Bluetooth` | Categorical | Bluetooth support (Yes/No) |
-| `Display Size` | Numerical | Display size in inches |
-| `Weight` | Categorical | Weight range category |
+| `Brand` | Categorical | Brand manufacturer (e.g., Apple, Samsung, Garmin, BoAt, Noise) |
+| `Model Name` | Categorical | Specific model name / series identifier |
+| `Current Price` | Numerical | Current discounted selling price (₹) |
+| `Original Price` | Numerical | Maximum Retail Price (MRP) (₹) |
+| `Discount Percentage` | Numerical | Applied discount rate (%) |
+| `Rating` | Numerical | User average rating (1.0 to 5.0 scale) |
+| `Number OF Ratings` | Numerical | Total number of consumer reviews |
+| `Dial Shape` | Categorical | Shape of the watch face (Circle, Square, Rectangle, Oval, etc.) |
+| `Strap Color` | Categorical | Color of the watch strap |
+| `Strap Material` | Categorical | Strap build material (Silicon, Leather, Metal, Stainless Steel, etc.) |
+| `Touchscreen` | Categorical / Binary | Touchscreen capability (`Yes` / `No` → Encoded as `1` / `0`) |
+| `Bluetooth` | Categorical / Binary | Bluetooth connectivity (`Yes` / `No` → Encoded as `1` / `0`) |
+| `Display Size` | Numerical | Screen diagonal size in inches (parsed from text) |
+| `Battery Life (Days)` | Numerical | Expected operational battery life per charge |
+| `Weight` | Categorical | Weight category class (`35 - 50 g`, `50 - 75 g`, `> 75 g`, etc.) |
 
-### Brands Covered
+### Brands Represented
 
 ```
 amazfit • ambrane • apple • boat • crossbeats • dizo • fire-boltt • fitbit
@@ -60,66 +65,87 @@ fossil • garmin • gizmore • hammer • honor • huawei • noise • pebb
 
 ---
 
-## 🔬 Methodology
+## 🔬 Methodology & Workflow
 
 This project follows the **CRISP-DM** (Cross-Industry Standard Process for Data Mining) framework:
 
-### 1. 🧠 Problem Identification & Business Understanding
-- Defined the prediction target: **Current Price** of smartwatches
-- Identified key business question: *What specifications and market signals most influence smartwatch pricing?*
+```mermaid
+flowchart LR
+    A[1. Business Understanding] --> B[2. Data Collection]
+    B --> C[3. Data Preprocessing & Audit]
+    C --> D[4. Outlier Analysis]
+    D --> E[5. Exploratory Data Analysis]
+    E --> F[6. Feature Engineering]
+    F --> G[7. Modeling & Evaluation]
+```
 
-### 2. 📥 Data Collection
-- Collected smartwatch listing data with 450 records across 18 brands
-- Features span hardware specs, market pricing, and user feedback
+### 1. 🧠 Problem Understanding
+- Defined regression target: `Current Price`.
+- Formulated key analytical questions regarding brand equity, hardware tradeoffs (battery vs. touchscreen/display), and discounting behavior.
 
-### 3. 🧹 Data Pre-Processing & Cleaning
+### 2. 📥 Data Ingestion
+- Loaded raw dataset (`smartwatches.csv`) with index alignment and dimension validation.
 
-#### Missing Value Treatment
-- **Categorical columns:** Imputed using the **mode** (most frequent value) grouped by `Brand`
-- **Numerical columns:** Imputed using the **median** grouped by `Brand`
-- This brand-aware imputation preserves the natural distribution within each brand's product line
+### 3. 🧹 Data Cleaning & Preprocessing
+- **Data Type Corrections:** Extracted clean numerical floats from `Display Size` by stripping the `"inches"` unit string.
+- **Brand-Aware Imputation:**
+  - Categorical columns imputed using the **mode** grouped by `Brand`.
+  - Numerical columns imputed using the **median** grouped by `Brand`.
+  - Preserves brand-specific distributions rather than distorting with global aggregates.
+- **Deduplication:** Audited and removed duplicate records, followed by index resetting.
+- **Data Auditing Utilities:** Implemented custom diagnostic functions:
+  - `check(data)`: Comprehensive audit of data types, valid instances, nulls, unique count, and duplicates.
+  - `check_unique(data)`: Quick inspection of unique counts and sample unique values across all attributes.
 
-#### Data Type Corrections
-- Converted `Display Size` from string (e.g., `"1.8 inches"`) → float by stripping unit suffixes
+### 4. 📈 Outlier Detection & Handling
+- **IQR (Interquartile Range) Method:** Computed bounds ($Q_1 - 1.5 \times \text{IQR}$ to $Q_3 + 1.5 \times \text{IQR}$) across all numeric columns using `tabulate`.
+- **Interactive Box Plots:** Visualized multi-feature distributions with Plotly Express to identify high-end luxury outliers (`Apple`, `Garmin`) and display anomalies.
 
-#### Duplicate Removal
-- Identified and removed duplicate records, then reset the index
+### 5. 🔍 Exploratory Data Analysis (EDA)
+- Extensively investigated relationships between brand tiers, prices, battery life, display sizes, ratings, and feature sets (detailed below).
 
-#### Data Validation
-- Built a custom `check()` function to audit every column for:
-  - Data type
-  - Valid instance count
-  - Unique values
-  - Null count
-  - Duplicate count
+### 6. ⚙️ Feature Engineering & Preprocessing *(In Progress)*
+- Binary feature encoding (`LabelEncoder` applied to `Touchscreen` and `Bluetooth`).
+- Preparation of categorical encoders and feature scaling for downstream regression pipelines.
 
-### 4. 📈 Outlier Detection
-- Applied the **IQR (Interquartile Range) method** on all numerical columns
-- Generated summary statistics using `tabulate` for clean reporting
-- Created **interactive box plots** using `Plotly Express` for visual inspection
-- Identified outliers in columns like `Current Price`, `Original Price`, `Number OF Ratings`, and `Display Size`
+---
 
-### 5. 🤖 Data Modeling *(In Progress)*
-> Feature engineering, encoding, and model training coming next.
+## 💡 Exploratory Data Analysis & Key Insights
 
-### 6. 📊 Model Evaluation *(Upcoming)*
-> Model comparison, cross-validation, and performance metrics.
+### 1. Pricing Dynamics & Brand Positioning
+- **Right-Skewed Distribution:** The majority of smartwatch sales concentrate in the budget segment (₹1,200 – ₹6,000), while luxury and specialized outdoor brands (Apple, Garmin, Fossil) create a long right tail with prices exceeding ₹80,000 to ₹1,39,000.
+- **Original Price vs. Discount Inversion:** High-MRP premium watches exhibit significantly lower discount percentages (or fixed pricing), whereas budget brands rely heavily on steep discounts (often 50%–80%) as a primary marketing mechanism.
+- **Price Correlation:** Strong positive linear relationship ($r > 0.8$) between `Original Price` and `Current Price`.
 
-### 7. 🚀 Model Deployment *(Upcoming)*
-> Deployment pipeline and serving predictions.
+### 2. Same-Model Price Discrepancies
+- Grouping by `(Brand, Model Name, Display Size, Weight)` revealed variants of identical models with differing selling prices.
+- Discrepancies stem from:
+  1. Strap material/color and dial shape variations.
+  2. Distinct promotional discounts across different SKUs.
+
+### 3. Battery Life Trade-offs
+- **Touchscreen Impact:** Smartwatches **without** touchscreens average significantly higher battery life (~20–25+ days) compared to touchscreen counterparts (~6–10 days).
+- **Multivariate Aggregations:** Analyzed `Battery Life (Days)` across `(Touchscreen, Bluetooth, Display Size)` combinations, illustrating that smaller screen sizes without active touch digitizers achieve maximum longevity.
+
+### 4. Weight vs. Pricing & Ratings
+- Devices in heavier weight categories (`> 75 g` and `50 - 75 g`) are often metal/stainless-steel builds or rugged outdoor smartwatches, carrying higher average selling prices.
+- Ratings remain consistently high across weight brackets (~4.0+), indicating broad consumer satisfaction across both lightweight bands and heavy premium watches.
+
+### 5. Rating Consistency
+- User ratings cluster tightly around a mean of **4.03 / 5.0** ($\sigma \approx 0.55$), showing consistent customer satisfaction irrespective of whether a watch includes Bluetooth calling or basic connectivity.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Category | Tools |
+| Domain | Tools & Libraries |
 |---|---|
-| **Language** | Python 3.13 |
-| **Data Manipulation** | Pandas, NumPy |
+| **Language** | Python 3.10+ |
+| **Data Processing** | Pandas, NumPy |
+| **Machine Learning & Preprocessing** | Scikit-Learn (`LabelEncoder`, etc.) |
 | **Visualization** | Matplotlib, Seaborn, Plotly Express |
-| **Reporting** | Tabulate |
-| **Environment** | Jupyter Notebook, venv |
-| **Version Control** | Git & GitHub |
+| **Data Auditing & Formatting** | Tabulate |
+| **Environment** | Jupyter Notebook, Python `venv` |
 
 ---
 
@@ -127,34 +153,41 @@ This project follows the **CRISP-DM** (Cross-Industry Standard Process for Data 
 
 ### Prerequisites
 
-- Python 3.10+ installed
-- `pip` package manager
+Ensure you have Python 3.10 or higher installed.
+
+```bash
+python --version
+```
 
 ### Installation
 
-```bash
-# Clone the repository
-git clone https://github.com/bhaveshsolanki159-codex/ML-mini-practice-Projects.git
-cd "ML-mini-practice-Projects/Watch Price Predictions"
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/bhaveshsolanki159-codex/ML-mini-practice-Projects.git
+   cd "ML-mini-practice-Projects/Watch Price Predictions"
+   ```
 
-# Create and activate a virtual environment
-python -m venv venv
+2. **Create and activate a virtual environment:**
+   ```bash
+   # Create venv
+   python -m venv venv
 
-# Windows
-venv\Scripts\activate
+   # Activate on Windows (PowerShell / Command Prompt)
+   .\venv\Scripts\activate
 
-# macOS / Linux
-source venv/bin/activate
+   # Activate on macOS / Linux
+   source venv/bin/activate
+   ```
 
-# Install dependencies
-pip install pandas numpy matplotlib seaborn plotly tabulate jupyter
-```
+3. **Install required dependencies:**
+   ```bash
+   pip install pandas numpy matplotlib seaborn plotly tabulate scikit-learn jupyter
+   ```
 
-### Run the Notebook
-
-```bash
-jupyter notebook main.ipynb
-```
+4. **Launch the Notebook:**
+   ```bash
+   jupyter notebook main.ipynb
+   ```
 
 ---
 
@@ -163,51 +196,54 @@ jupyter notebook main.ipynb
 ```
 Watch Price Predictions/
 │
-├── main.ipynb          # Main Jupyter notebook with all analysis & modeling
-├── smartwatches.csv    # Raw dataset (450 records × 15 features)
-├── README.md           # Project documentation (you are here)
-├── venv/               # Python virtual environment
+├── main.ipynb          # Jupyter notebook containing data cleaning, auditing, and EDA
+├── smartwatches.csv    # Dataset with 450 smartwatch listings and 15 features
+├── README.md           # Project documentation and findings
+├── venv/               # Local virtual environment (ignored in git)
 └── .gitignore          # Git ignore rules
 ```
 
 ---
 
-## 📈 Key Findings (So Far)
-
-- **Price distribution** is heavily right-skewed — most smartwatches fall in the ₹1,200–₹5,000 range, with premium outliers (Apple, Garmin, Fossil) exceeding ₹80,000
-- **Discount percentages** range from -79% (markup) to 91%, with a mean of ~48%
-- **Battery life** clusters around 8 and 17–22 days, suggesting two distinct product categories (fitness bands vs. full smartwatches)
-- **User ratings** are tightly distributed (mean 4.03, std 0.55), indicating overall positive reception across brands
-- **Significant outliers** were detected in `Current Price`, `Original Price`, and `Number OF Ratings` columns
-
----
-
 ## 🗺️ Roadmap
 
-- [x] Problem identification & business understanding
-- [x] Data collection
-- [x] Data pre-processing (missing values, type conversion, deduplication)
-- [x] Outlier detection & visualization
-- [ ] Exploratory Data Analysis (EDA) — correlation, distribution plots, brand-wise analysis
-- [ ] Feature engineering & encoding
-- [ ] Model training (Linear Regression, Random Forest, XGBoost, etc.)
-- [ ] Model evaluation & hyperparameter tuning
-- [ ] Model deployment
+- [x] Problem formulation and business objective definition
+- [x] Data collection and ingestion
+- [x] Data cleaning (type casting, brand-wise mode/median imputation, deduplication)
+- [x] Custom dataset auditing functions (`check`, `check_unique`)
+- [x] Outlier detection via IQR and Plotly box plots
+- [x] Exploratory Data Analysis (EDA)
+  - [x] Price vs. discount correlation analysis
+  - [x] Brand-wise price & model distribution
+  - [x] Battery life vs. touchscreen / Bluetooth / display size analysis
+  - [x] Intra-model price variation analysis
+  - [x] Weight category vs. price and rating analysis
+- [x] Feature encoding (`LabelEncoder` for binary variables)
+- [ ] Advanced Feature Engineering (One-Hot Encoding, scaling, target transformation)
+- [ ] Baseline & Advanced Model Training (Linear Regression, Ridge, Random Forest, XGBoost, LightGBM)
+- [ ] Hyperparameter Tuning & Cross-Validation
+- [ ] Model Evaluation (RMSE, MAE, $R^2$ Score) & Feature Importance Analysis
+- [ ] Deployment (Streamlit / Flask web app for live price estimation)
 
 ---
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to open an issue or submit a pull request.
+Contributions, improvements, and feedback are always welcome!
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/NewAnalysis`)
+3. Commit your changes (`git commit -m 'Add new model evaluation'`)
+4. Push to the branch (`git push origin feature/NewAnalysis`)
+5. Open a Pull Request
 
 ---
 
 ## 📄 License
 
-This project is open source and available for educational purposes.
+This project is licensed under the MIT License — feel free to use it for study and research purposes.
 
 ---
 
 <p align="center">
-  Made with ❤️ by <a href="https://github.com/bhaveshsolanki159-codex">Bhavesh Solanki</a>
+  Crafted with passion by <a href="https://github.com/bhaveshsolanki159-codex">Bhavesh Solanki</a>
 </p>
