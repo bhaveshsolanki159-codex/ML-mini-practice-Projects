@@ -218,11 +218,12 @@ Watch Price Predictions/
   - [x] Battery life vs. touchscreen / Bluetooth / display size analysis
   - [x] Intra-model price variation analysis
   - [x] Weight category vs. price and rating analysis
-- [x] Feature encoding (`LabelEncoder` for binary variables)
-- [ ] Advanced Feature Engineering (One-Hot Encoding, scaling, target transformation)
-- [ ] Baseline & Advanced Model Training (Linear Regression, Ridge, Random Forest, XGBoost, LightGBM)
+- [x] Feature encoding & preprocessing (`ColumnTransformer`, `OneHotEncoder`, `StandardScaler`, ordinal `Weight` mapping)
+- [x] Target log-transformation (`TransformedTargetRegressor` with $\log(1+y)$)
+- [x] Baseline & ensemble model benchmarking (Linear Regression, Ridge, Decision Tree, Random Forest, Gradient Boosting, AdaBoost)
+- [x] Model evaluation (RMSE, MAE, $R^2$ Score) & Feature Importance Analysis
 - [ ] Hyperparameter Tuning & Cross-Validation
-- [ ] Model Evaluation (RMSE, MAE, $R^2$ Score) & Feature Importance Analysis
+- [ ] Advanced Boosting (XGBoost, LightGBM, CatBoost) & Ensembling / Stacking
 - [ ] Deployment (Streamlit / Flask web app for live price estimation)
 
 ---
