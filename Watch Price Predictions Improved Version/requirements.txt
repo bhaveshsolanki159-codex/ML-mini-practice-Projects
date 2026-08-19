@@ -2,10 +2,13 @@
 numpy
 pandas
 scipy
+statsmodels
 
-# Data Visualization
+# Data Visualization & EDA
 matplotlib
 seaborn
+plotly
+ydata-profiling
 
 # Machine Learning & Modeling
 scikit-learn
@@ -13,10 +16,15 @@ xgboost
 lightgbm
 joblib
 
-# Notebook & Development
+# Notebook & Interactive Widgets
 ipykernel
 jupyterlab
+ipywidgets
+nbformat
 
 # Utilities & File I/O
+setuptools<80
 openpyxl
 tqdm
+requests
+
